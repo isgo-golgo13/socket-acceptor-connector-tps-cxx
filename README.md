@@ -1,7 +1,7 @@
 # Socket Acceptor-Connector Thread Per-Session (POSA 2 C++)
 C++20 POSA 2 Socket Acceptor-Connector Design Pattern for Client and Server using Thread-Per-Session (TPS) from ACE C++ Framework
 
-## Threaad Per-Connection vs Thread Per-Session Differences
+## Thread Per-Connection vs Thread Per-Session Differences
 
 
 ## Compiling the Project
