@@ -12,6 +12,12 @@ To compile the project, create a `dist` directory and from the root of the proje
 cmake -S . -B ./dist 
 ```
 
+Next produce the exes.
+
+```shell
+cmake --build ./dist
+```
+
 This root-level CMakeLists.txt will call on the `client/CMakeLists.txt` and `server/CMakeLists.txt` files that in-turn will require to create the `svckit` Unix shared library.
 
 ## Project Structure
