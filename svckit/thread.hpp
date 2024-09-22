@@ -15,6 +15,7 @@ public:
 
     void start();
     void join();
+    bool joinable() const;
 
 private:
     std::function<void()> func_;

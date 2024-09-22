@@ -3,6 +3,11 @@ C++20 POSA 2 Socket Acceptor-Connector Design Pattern for Client and Server usin
 
 ## Thread Per-Connection vs Thread Per-Session Differences
 
+The following are the differences of Thread Per-Connection vs Thread Per-Session.
+
+- Client (client.cpp): The client simulates multiple sessions by creating threads that each establish a connection, send data, and then close the connection.
+
+- Server (server.cpp): The server accepts each connection and spawns a thread to handle a single session (request/response). After processing, the thread and the connection are closed.
 
 ## Compiling the Project
 

@@ -5,9 +5,10 @@
 #include <memory>
 #include <cstring>
 #include <unistd.h>
+#include <vector>
 
-constexpr int PORT = 8080;  // Port for server to listen on
-constexpr int BUFFER_SIZE = 1024;  // Buffer size for receiving data
+constexpr int PORT = 8080;
+constexpr int BUFFER_SIZE = 1024;
 
 void handleSession(int clientSocket) {
     char buffer[BUFFER_SIZE];
@@ -17,12 +18,13 @@ void handleSession(int clientSocket) {
         std::cout << "Received data: " << std::string(buffer, bytesRead) << std::endl;
     }
 
-    close(clientSocket);  // Close the connection after handling the session
+    close(clientSocket);  // Close the connection after session
 }
 
 int main() {
-    SocketAddr addr("127.0.0.1", PORT);
+    SocketAddr addr("0.0.0.0", PORT);  // Listen on all interfaces
     auto acceptor = std::make_unique<SocketAcceptor>(addr);
+    std::vector<std::unique_ptr<Thread>> sessionThreads;
 
     acceptor->bind();
     acceptor->listen();
@@ -31,14 +33,27 @@ int main() {
 
     while (true) {
         int clientSocket = acceptor->acceptConnection();
-        
-        // Create a thread for each session (thread-per-session)
-        auto thread = std::make_unique<Thread>([clientSocket]() {
+
+        // Store the session thread in a collection
+        sessionThreads.emplace_back(std::make_unique<Thread>([clientSocket]() {
             handleSession(clientSocket);
-        });
-        
-        thread->start();
-        thread->join();  // Join immediately to process one session at a time
+        }));
+
+        // Start the thread (non-blocking)
+        sessionThreads.back()->start();
+
+        // Clean up completed threads (join finished threads)
+        sessionThreads.erase(
+            std::remove_if(sessionThreads.begin(), sessionThreads.end(),
+            [](const std::unique_ptr<Thread>& thread) {
+                if (thread->joinable()) {
+                    thread->join();  // Join threads that have finished
+                    return true;     // Remove them from the collection
+                }
+                return false;
+            }),
+            sessionThreads.end()
+        );
     }
 
     return 0;

@@ -11,3 +11,7 @@ void Thread::join() {
         thread_.join();
     }
 }
+
+bool Thread::joinable() const {
+    return thread_.joinable();
+}
