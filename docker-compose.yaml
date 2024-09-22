@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: acceptor_server
+    ports:
+      - "8080:8080"  # Expose server port
+    networks:
+      - acceptor_network
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: connector_client
+    depends_on:
+      - server
+    networks:
+      - acceptor_network
+
+networks:
+  acceptor_network:
+    driver: bridge
