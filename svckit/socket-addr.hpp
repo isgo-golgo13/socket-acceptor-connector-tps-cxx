@@ -16,6 +16,7 @@ public:
     [[nodiscard]] int getPort() const;
 
 private:
+    //struct sockaddr_in addr_;  //SocketAddr wraps sockaddr_in struct 
     std::string ip_;
     int port_;
 };
