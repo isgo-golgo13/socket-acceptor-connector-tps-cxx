@@ -1,5 +1,6 @@
 #include "socket-connector.hpp"
 #include "socket-addr.hpp"
+#include <thread>
 #include <iostream>
 #include <memory>
 

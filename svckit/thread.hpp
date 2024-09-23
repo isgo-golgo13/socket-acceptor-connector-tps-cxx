@@ -15,6 +15,7 @@ public:
 
     void start();
     void join();
+    //Join the threads in the collection at a later point
     bool joinable() const;
 
 private:
