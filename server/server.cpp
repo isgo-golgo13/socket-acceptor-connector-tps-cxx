@@ -3,19 +3,19 @@
 #include "thread.hpp"
 #include <iostream>
 #include <memory>
-#include <cstring>
 #include <unistd.h>
 #include <vector>
+#include <algorithm>
 
 constexpr int PORT = 8080;
 constexpr int BUFFER_SIZE = 1024;
 
 void handleSession(int clientSocket) {
-    char buffer[BUFFER_SIZE];
-    ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+    std::vector<char> buffer(BUFFER_SIZE);
+    ssize_t bytesRead = recv(clientSocket, buffer.data(), buffer.size(), 0);
 
     if (bytesRead > 0) {
-        std::cout << "Received data: " << std::string(buffer, bytesRead) << std::endl;
+        std::cout << "Received data: " << std::string(buffer.data(), bytesRead) << std::endl;
     }
 
     close(clientSocket);  // Close the connection after session

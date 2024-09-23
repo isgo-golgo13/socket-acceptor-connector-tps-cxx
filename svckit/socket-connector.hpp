@@ -15,12 +15,12 @@ public:
     ~SocketConnector() = default;
 
     void connect();
-     std::unique_ptr<Socket> getSocket();
-    void sendData(const void* buffer, size_t length);
-    void recvData(void* buffer, size_t length);
+    std::unique_ptr<Socket> getSocket();
+    void sendData(const std::vector<char>& buffer);
+    void recvData(std::vector<char>& buffer);
 
 private:
     int clientSocket_;
     SocketAddr serverAddr_;
-    std::unique_ptr<Socket> socket_;  // Use Socket class
+    std::unique_ptr<Socket> socket_;
 };

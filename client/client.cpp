@@ -1,28 +1,31 @@
 #include "socket-connector.hpp"
 #include "socket-addr.hpp"
-#include <thread>
-#include <vector>
 #include <iostream>
-#include <memory>
+#include <vector>
+#include <thread>
+#include <string>
 
-constexpr int SESSION_COUNT = 5;  // Number of sessions
-constexpr auto PAYLOAD = "Payload-000000000000000001";  // Data to send
+constexpr int SESSION_COUNT = 5;
 constexpr int BUFFER_SIZE = 1024;
 constexpr int PORT = 8080;
 
 void sendSession() {
+    // Use std::string for payload
+    std::string payload_str = "Payload-00000000000000001";
+    std::vector<char> payload(payload_str.begin(), payload_str.end());
+
     // Create and connect SocketConnector
     SocketAddr addr("127.0.0.1", PORT);
     SocketConnector connector(addr);
     connector.connect();
 
     // Send data
-    connector.sendData(PAYLOAD, strlen(PAYLOAD));
+    connector.sendData(payload);
 
     // Receive response
-    char buffer[BUFFER_SIZE];
-    connector.recvData(buffer, sizeof(buffer));
-    std::cout << "Received from server: " << buffer << std::endl;
+    std::vector<char> buffer(BUFFER_SIZE);
+    connector.recvData(buffer);
+    std::cout << "Received from server: " << std::string(buffer.data(), buffer.size()) << std::endl;
 }
 
 int main() {
